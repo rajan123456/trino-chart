@@ -29,8 +29,8 @@ The following table lists the configurable parameters of the Trino chart and the
 | `server.config.query.maxMemory` |  | `"4GB"` |
 | `server.exchangeManager.name` |  | `"filesystem"` |
 | `server.exchangeManager.baseDir` |  | `"/tmp/trino-local-file-system-exchange-manager"` |
-| `server.workerExtraConfig` |  | `""` |
-| `server.coordinatorExtraConfig` |  | `""` |
+| `server.workerExtraConfig` |  | `[]` |
+| `server.coordinatorExtraConfig` |  | `[]` |
 | `server.autoscaling.enabled` |  | `false` |
 | `server.autoscaling.maxReplicas` |  | `5` |
 | `server.autoscaling.targetCPUUtilizationPercentage` |  | `50` |
@@ -40,6 +40,8 @@ The following table lists the configurable parameters of the Trino chart and the
 | `additionalLogProperties` |  | `{}` |
 | `additionalExchangeManagerProperties` |  | `{}` |
 | `eventListenerProperties` |  | `{}` |
+| `passwordAuthenticatorProperties` |  | `{}` |
+| `catalogs.enabled` |  | `true` |
 | `additionalCatalogs` |  | `{}` |
 | `env` |  | `[]` |
 | `initContainers` |  | `{}` |
@@ -47,6 +49,7 @@ The following table lists the configurable parameters of the Trino chart and the
 | `securityContext.runAsGroup` |  | `1000` |
 | `service.type` |  | `"ClusterIP"` |
 | `service.port` |  | `8080` |
+| `service.nodePort` |  | `""` |
 | `auth` |  | `{}` |
 | `serviceAccount.create` |  | `false` |
 | `serviceAccount.name` |  | `""` |
@@ -66,6 +69,8 @@ The following table lists the configurable parameters of the Trino chart and the
 | `coordinator.tolerations` |  | `[]` |
 | `coordinator.affinity` |  | `{}` |
 | `coordinator.additionalConfigFiles` |  | `{}` |
+| `coordinator.extraVolumes` |  | `[]` |
+| `coordinator.extraVolumeMounts` |  | `[]` |
 | `worker.jvm.maxHeapSize` |  | `"8G"` |
 | `worker.jvm.gcMethod.type` |  | `"UseG1GC"` |
 | `worker.jvm.gcMethod.g1.heapRegionSize` |  | `"32M"` |
@@ -80,8 +85,11 @@ The following table lists the configurable parameters of the Trino chart and the
 | `worker.tolerations` |  | `[]` |
 | `worker.affinity` |  | `{}` |
 | `worker.additionalConfigFiles` |  | `{}` |
+| `worker.extraVolumes` |  | `[]` |
+| `worker.extraVolumeMounts` |  | `[]` |
 | `kafka.mountPath` |  | `"/etc/trino/schemas"` |
 | `kafka.tableDescriptions` |  | `{}` |
+| `extraDeploy` |  | `[]` |
 
 
 

@@ -28,12 +28,17 @@ spec:
         - name: config-volume
           configMap:
             name: {{ template "trino.worker" . }}
+        {{- if .Values.catalogs.enabled }}
         - name: catalog-volume
           configMap:
             name: {{ template "trino.catalog" . }}
+        {{- end }}
         - name: schemas-volume
           configMap:
             name: schemas-volume-worker
+        {{- if .Values.worker.extraVolumes }}
+        {{- include "tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
       {{- if .Values.initContainers.worker }}
       initContainers:
       {{-  tpl (toYaml .Values.initContainers.worker) . | nindent 6 }}
@@ -49,10 +54,15 @@ spec:
           volumeMounts:
             - mountPath: {{ .Values.server.config.path }}
               name: config-volume
+            {{- if .Values.catalogs.enabled }}
             - mountPath: {{ .Values.server.config.path }}/catalog
               name: catalog-volume
+            {{- end }}
             - mountPath: {{ .Values.kafka.mountPath }}
               name: schemas-volume
+            {{- if .Values.worker.extraVolumeMounts }}
+            {{- include "tplvalues.render" (dict "value" .Values.worker.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

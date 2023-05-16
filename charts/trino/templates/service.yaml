@@ -10,15 +10,25 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.server.config.http.port }}
       targetPort: http
       protocol: TCP
       name: http
+      {{- if (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- else if eq .Values.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
     {{- range $key, $value := .Values.coordinator.additionalExposedPorts }}
     - port: {{ $value.servicePort }}
       name: {{ $value.name }}
       targetPort: {{ $value.port }}
       protocol: {{ $value.protocol }}
+      {{- if empty $value.nodePort }}
+      nodePort: null
+      {{- else }}
+      nodePort: {{ $value.nodePort }}
+      {{- end }}
     {{- end }}
   selector:
     app: {{ template "trino.name" . }}

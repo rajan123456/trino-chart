@@ -37,8 +37,8 @@ server:
   exchangeManager:
     name: "filesystem"
     baseDir: "/tmp/trino-local-file-system-exchange-manager"
-  workerExtraConfig: ""
-  coordinatorExtraConfig: ""
+  workerExtraConfig: []
+  coordinatorExtraConfig: []
   autoscaling:
     enabled: false
     maxReplicas: 5
@@ -105,6 +105,11 @@ additionalExchangeManagerProperties: {}
 
 eventListenerProperties: {}
 
+passwordAuthenticatorProperties: {}
+
+catalogs:
+  enabled: true
+
 additionalCatalogs: {}
 
 # Array of EnvVar (https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#envvar-v1-core)
@@ -128,6 +133,7 @@ securityContext:
 service:
   type: ClusterIP
   port: 8080
+  nodePort: ""
 
 auth: {}
   # Set username and password
@@ -196,6 +202,10 @@ coordinator:
 
   additionalConfigFiles: {}
 
+  extraVolumes: []
+  
+  extraVolumeMounts: []
+
 worker:
   jvm:
     maxHeapSize: "8G"
@@ -247,6 +257,10 @@ worker:
 
   additionalConfigFiles: {}
 
+  extraVolumes: []
+  
+  extraVolumeMounts: []
+
 kafka:
   mountPath: "/etc/trino/schemas"
   tableDescriptions: {}
@@ -283,3 +297,5 @@ kafka:
     #       ]
     #     }
     #   }
+
+extraDeploy: []

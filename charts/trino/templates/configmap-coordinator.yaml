@@ -51,7 +51,6 @@ data:
 {{- if .Values.coordinator.config.memory.heapHeadroomPerNode }}
     memory.heap-headroom-per-node={{ .Values.coordinator.config.memory.heapHeadroomPerNode }}
 {{- end }}
-    discovery-server.enabled=true
     discovery.uri=http://localhost:{{ .Values.service.port }}
 {{- if .Values.server.config.authenticationType }}
     http-server.authentication.type={{ .Values.server.config.authenticationType }}
@@ -64,7 +63,9 @@ data:
     http-server.https.port={{ .Values.server.config.https.port }}
     http-server.https.keystore.path={{ .Values.server.config.https.keystore.path }}
   {{- end }}
-  {{ .Values.server.coordinatorExtraConfig | indent 4 }}
+  {{- range $configValue := .Values.server.coordinatorExtraConfig }}
+    {{ $configValue }}
+  {{- end }}
 
 {{- if .Values.accessControl }}{{- if eq .Values.accessControl.type "configmap" }}
   access-control.properties: |
@@ -77,9 +78,6 @@ data:
 
   exchange-manager.properties: |
     exchange-manager.name={{ .Values.server.exchangeManager.name }}
-  {{ if eq .Values.server.exchangeManager.name "filesystem" }}
-    exchange.base-directory={{ .Values.server.exchangeManager.baseDir }}
-  {{- end }}  
   {{- range $configValue := .Values.additionalExchangeManagerProperties }}
     {{ $configValue }}
   {{- end }}
@@ -92,9 +90,10 @@ data:
 
   {{- if eq .Values.server.config.authenticationType "PASSWORD" }}
   password-authenticator.properties: |
-    password-authenticator.name=file
-    file.password-file={{ .Values.server.config.path }}/auth/password.db
-  {{- end }}
+    {{- range $configValue := .Values.passwordAuthenticatorProperties }}
+      {{ $configValue }}
+    {{- end }}
+{{ end }}
 
 {{ if .Values.eventListenerProperties }}
   event-listener.properties: |
