@@ -122,6 +122,9 @@ spec:
             successThreshold: {{ .Values.coordinator.readinessProbe.successThreshold | default 1 }}
           resources:
             {{- toYaml .Values.coordinator.resources | nindent 12 }}
+      {{- if .Values.coordinator.sidecars }}
+      {{- include "tplvalues.render" (dict "value" .Values.coordinator.sidecars "context" $) | trim | nindent 8 }}
+      {{- end }}
       {{- with .Values.coordinator.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

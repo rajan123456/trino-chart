@@ -206,6 +206,8 @@ coordinator:
   
   extraVolumeMounts: []
 
+  sidecars: []
+
 worker:
   jvm:
     maxHeapSize: "8G"
